@@ -1,0 +1,1210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IRONWORKS — Athletic Club · Strength, Forged Daily</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+/* ============ TOKENS ============ */
+:root{
+  --ink:#0b0b0c; --coal:#131315; --panel:#17171a; --bone:#edeae2; --dim:#8b8b90;
+  --volt:#d7ff3e; --ember:#ff4d2e;
+  --line:rgba(237,234,226,.14); --line-strong:rgba(237,234,226,.3);
+  --disp:'Anton',sans-serif; --body:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
+  --nav:72px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--ink);color:var(--bone);font-family:var(--body);font-size:16px;line-height:1.6;overflow-x:hidden}
+::selection{background:var(--volt);color:var(--ink)}
+img{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--volt);outline-offset:3px}
+h1,h2,h3{font-family:var(--disp);font-weight:400;text-transform:uppercase;line-height:.95;letter-spacing:.01em}
+.mono{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase}
+.dim{color:var(--dim)} .volt{color:var(--volt)} .ember{color:var(--ember)}
+.wrap{max-width:1320px;margin:0 auto;padding:0 28px}
+section{position:relative}
+
+/* ============ NOISE + PROGRESS ============ */
+.noise{position:fixed;inset:0;z-index:2000;pointer-events:none;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+#progress{position:fixed;top:0;left:0;height:3px;width:0;background:var(--volt);z-index:2100}
+
+/* ============ TOP TICKER ============ */
+.ticker{border-bottom:1px solid var(--line);background:var(--coal);overflow:hidden}
+.ticker-track{display:flex;width:max-content;animation:marq 28s linear infinite}
+.ticker span{display:flex;align-items:center;gap:.6em;padding:9px 0;white-space:nowrap}
+.ticker b{color:var(--volt);font-weight:400;padding:0 1.4em}
+@keyframes marq{to{transform:translateX(-50%)}}
+
+/* ============ NAV ============ */
+header{position:sticky;top:0;z-index:900;height:var(--nav);display:flex;align-items:center;
+  border-bottom:1px solid var(--line);transition:background .3s,backdrop-filter .3s}
+header.scrolled{background:rgba(11,11,12,.86);backdrop-filter:blur(10px)}
+.nav{display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%}
+.logo{font-family:var(--disp);font-size:1.5rem;letter-spacing:.03em;display:flex;align-items:center;gap:.5rem}
+.logo i{width:12px;height:12px;background:var(--volt);display:inline-block;flex:none}
+.nav-links{display:flex;gap:32px;align-items:center}
+.nav-links a{font-family:var(--mono);font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;color:var(--dim);position:relative;padding:6px 0;transition:color .25s}
+.nav-links a::after{content:"";position:absolute;left:0;bottom:0;width:0;height:1px;background:var(--volt);transition:width .3s}
+.nav-links a:hover{color:var(--bone)} .nav-links a:hover::after{width:100%}
+.nav-cta{display:flex;gap:14px;align-items:center}
+.open-dot{display:inline-flex;align-items:center;gap:8px;color:var(--volt)}
+.open-dot i{width:8px;height:8px;border-radius:50%;background:var(--volt);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(215,255,62,.5)}70%{box-shadow:0 0 0 9px rgba(215,255,62,0)}100%{box-shadow:0 0 0 0 rgba(215,255,62,0)}}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:.7em;font-family:var(--mono);font-size:.74rem;font-weight:600;
+  letter-spacing:.14em;text-transform:uppercase;padding:15px 24px;border:1px solid var(--line-strong);
+  background:transparent;color:var(--bone);transition:background .25s,color .25s,border-color .25s,transform .2s;position:relative}
+.btn:hover{border-color:var(--bone)}
+.btn .arr{transition:transform .25s}
+.btn:hover .arr{transform:translate(3px,-3px)}
+.btn-volt{background:var(--volt);color:var(--ink);border-color:var(--volt)}
+.btn-volt:hover{background:var(--bone);border-color:var(--bone)}
+.btn-sm{padding:9px 14px;font-size:.66rem}
+.burger{display:none;background:none;border:1px solid var(--line-strong);width:44px;height:44px;flex-direction:column;gap:5px;align-items:center;justify-content:center}
+.burger span{width:20px;height:2px;background:var(--bone);transition:.3s}
+body.menu-open .burger span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+body.menu-open .burger span:nth-child(2){opacity:0}
+body.menu-open .burger span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{position:fixed;inset:0;background:var(--ink);z-index:850;display:flex;flex-direction:column;justify-content:center;padding:0 28px;gap:6px;
+  clip-path:inset(0 0 100% 0);transition:clip-path .5s cubic-bezier(.77,0,.18,1)}
+body.menu-open .mobile-menu{clip-path:inset(0 0 0 0)}
+.mobile-menu a{font-family:var(--disp);font-size:clamp(2.4rem,9vw,4rem);text-transform:uppercase;border-bottom:1px solid var(--line);padding:12px 0;
+  opacity:0;transform:translateY(20px);transition:opacity .4s,transform .4s}
+body.menu-open .mobile-menu a{opacity:1;transform:none}
+.mobile-menu a:hover{color:var(--volt)}
+
+/* ============ HERO ============ */
+.hero{min-height:calc(100vh - var(--nav) - 34px);display:flex;align-items:center;overflow:hidden;
+  background-image:linear-gradient(rgba(237,234,226,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(237,234,226,.035) 1px,transparent 1px);
+  background-size:72px 72px}
+.hero-bg{position:absolute;right:-6%;top:0;width:58%;height:100%;overflow:hidden;z-index:0}
+.hero-bg img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15) brightness(.5);animation:kb 18s ease-in-out infinite alternate}
+.hero-bg::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,var(--ink) 0%,transparent 45%),linear-gradient(0deg,var(--ink),transparent 40%)}
+@keyframes kb{from{transform:scale(1)}to{transform:scale(1.1) translate(-2%,2%)}}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.25fr .9fr;gap:60px;align-items:center;padding:80px 0}
+.kicker{display:flex;align-items:center;gap:14px;margin-bottom:26px}
+.kicker .rule{width:56px;height:1px;background:var(--volt)}
+.hero h1{font-size:clamp(3.4rem,8.6vw,7.6rem)}
+.lm{display:block;overflow:hidden}
+.lm>span{display:block;transform:translateY(112%);transition:transform 1s cubic-bezier(.19,1,.22,1)}
+.inview .lm>span{transform:none}
+.hero-sub{max-width:480px;color:var(--dim);margin:28px 0 36px;font-size:1.05rem}
+.hero-actions{display:flex;gap:16px;flex-wrap:wrap}
+.scramble-line{margin-top:44px;color:var(--volt)}
+
+/* live board */
+.board{background:var(--coal);border:1px solid var(--line);position:relative}
+.board::before{content:"";position:absolute;top:-8px;left:-8px;right:-8px;height:8px;
+  background:repeating-linear-gradient(45deg,var(--volt) 0 10px,transparent 10px 20px)}
+.board-head{display:flex;align-items:center;gap:10px;padding:18px 22px;border-bottom:1px solid var(--line)}
+.board-head .dot{width:9px;height:9px;border-radius:50%;background:var(--ember);animation:pulse 1.6s infinite}
+.board-next{padding:24px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+.board-next .cls{font-family:var(--disp);font-size:1.9rem;text-transform:uppercase}
+.countdown{font-family:var(--mono);font-size:1.7rem;color:var(--volt);font-weight:700;font-variant-numeric:tabular-nums}
+.board ul{list-style:none}
+.board li{display:grid;grid-template-columns:64px 1fr auto;gap:14px;align-items:center;padding:14px 22px;border-bottom:1px solid var(--line);transition:background .2s}
+.board li:hover{background:rgba(215,255,62,.05)}
+.board li .t{font-family:var(--mono);color:var(--volt);font-size:.8rem}
+.board li .n{font-weight:700;font-size:.92rem}
+.board li .n em{display:block;font-style:normal;font-weight:400;font-size:.72rem;color:var(--dim)}
+.board-foot{padding:14px 22px;display:flex;justify-content:space-between;align-items:center}
+.reserve-mini{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;padding:8px 12px;border:1px solid var(--line-strong);background:none;color:var(--bone);transition:.25s}
+.reserve-mini:hover{background:var(--volt);color:var(--ink);border-color:var(--volt)}
+.reserve-mini.done{background:transparent;border-color:var(--volt);color:var(--volt);cursor:default}
+.reserve-mini.full{opacity:.35;cursor:not-allowed}
+
+/* ============ STATS ============ */
+.stats{border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr)}
+.stat{padding:44px 32px;border-left:1px solid var(--line)}
+.stat:first-child{border-left:none}
+.stat .num{font-family:var(--disp);font-size:clamp(2.4rem,4.5vw,3.6rem);color:var(--volt)}
+.stat .lbl{color:var(--dim);margin-top:6px}
+
+/* ============ SECTION HEAD ============ */
+.sec{padding:120px 0}
+.sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:30px;margin-bottom:64px;flex-wrap:wrap}
+.sec-index{display:flex;align-items:center;gap:14px;margin-bottom:18px}
+.sec-index .rule{width:56px;height:1px;background:var(--volt)}
+.sec h2{font-size:clamp(2.6rem,6vw,4.6rem)}
+.sec-lede{max-width:380px;color:var(--dim)}
+
+/* ============ PROGRAMS — sticky + stacked cards ============ */
+.prog-grid{display:grid;grid-template-columns:.85fr 1.15fr;gap:70px;align-items:start}
+.prog-sticky{position:sticky;top:calc(var(--nav) + 40px)}
+.prog-sticky p{color:var(--dim);margin:24px 0 34px;max-width:340px}
+.prog-index{list-style:none;border-top:1px solid var(--line)}
+.prog-index li{display:flex;gap:18px;padding:14px 0;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:.75rem;letter-spacing:.12em;text-transform:uppercase;color:var(--dim)}
+.prog-index li b{color:var(--volt);font-weight:400}
+.stack{display:flex;flex-direction:column;gap:32px}
+.p-card{position:sticky;background:var(--coal);border:1px solid var(--line);display:grid;grid-template-columns:44% 1fr;min-height:340px;overflow:hidden}
+.p-card:nth-child(1){top:calc(var(--nav) + 20px)} .p-card:nth-child(2){top:calc(var(--nav) + 44px)}
+.p-card:nth-child(3){top:calc(var(--nav) + 68px)} .p-card:nth-child(4){top:calc(var(--nav) + 92px)}
+.p-card:nth-child(5){top:calc(var(--nav) + 116px)}
+.p-card.alt{background:var(--bone);color:var(--ink)}
+.p-card.alt .dim{color:#55534c}
+.p-card.volted{background:var(--volt);color:var(--ink)}
+.p-card.volted .dim{color:rgba(11,11,12,.65)}
+.p-media{overflow:hidden;position:relative;min-height:240px}
+.p-media img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.1);transition:transform 1.2s cubic-bezier(.19,1,.22,1),filter .5s}
+.p-card:hover .p-media img{transform:scale(1.07);filter:grayscale(.1) contrast(1.05)}
+.p-body{padding:34px;display:flex;flex-direction:column;justify-content:space-between;gap:20px}
+.p-num{font-family:var(--mono);font-size:.75rem;letter-spacing:.2em}
+.p-body h3{font-size:clamp(1.7rem,2.6vw,2.5rem)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;border:1px solid currentColor;padding:5px 10px;opacity:.75}
+
+/* giant divider marquee */
+.giant-marq{overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:26px 0}
+.giant-track{display:flex;width:max-content;animation:marq 34s linear infinite reverse}
+.giant-track span{font-family:var(--disp);font-size:clamp(3rem,7vw,6rem);text-transform:uppercase;white-space:nowrap;padding-right:.6em;
+  color:transparent;-webkit-text-stroke:1px rgba(237,234,226,.35)}
+.giant-track span b{color:var(--volt);-webkit-text-stroke:0;font-weight:400}
+
+/* ============ THE FLOOR — scattered polaroids ============ */
+.floor-field{position:relative;display:grid;grid-template-columns:repeat(12,1fr);gap:0;padding:20px 0 40px}
+.polaroid{background:#f4f1e8;color:#141414;padding:12px 12px 14px;box-shadow:0 24px 50px rgba(0,0,0,.5);
+  transition:transform .5s cubic-bezier(.19,1,.22,1),box-shadow .5s;position:relative}
+.polaroid figcaption{font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;padding-top:12px;display:flex;justify-content:space-between}
+.polaroid::before{content:"";position:absolute;top:-14px;left:50%;transform:translateX(-50%) rotate(-2deg);width:90px;height:26px;background:rgba(215,255,62,.55);border:1px solid rgba(11,11,12,.12)}
+.polaroid img{filter:grayscale(.9) contrast(1.1);transition:filter .5s}
+.polaroid:hover{transform:rotate(0deg) scale(1.05)!important;box-shadow:0 40px 70px rgba(0,0,0,.65);z-index:5}
+.polaroid:hover img{filter:grayscale(0) contrast(1)}
+.pl-1{grid-column:1/4;transform:rotate(-4deg)}
+.pl-2{grid-column:4/7;transform:rotate(2.5deg);margin-top:60px}
+.pl-3{grid-column:7/10;transform:rotate(-2deg);margin-top:14px}
+.pl-4{grid-column:10/13;transform:rotate(4deg);margin-top:74px}
+.pl-5{grid-column:2/5;transform:rotate(3deg);margin-top:-30px}
+.pl-6{grid-column:8/12;transform:rotate(-3deg);margin-top:-44px}
+
+/* ============ SCHEDULE ============ */
+.sched-panel{border:1px solid var(--line);background:var(--coal)}
+.sched-tabs{display:flex;border-bottom:1px solid var(--line);overflow-x:auto;scrollbar-width:none}
+.sched-tabs::-webkit-scrollbar{display:none}
+.day-tab{flex:1;min-width:90px;background:none;border:none;border-left:1px solid var(--line);color:var(--dim);
+  font-family:var(--mono);font-size:.72rem;letter-spacing:.16em;padding:18px 10px;position:relative;transition:color .25s,background .25s}
+.day-tab:first-child{border-left:none}
+.day-tab:hover{color:var(--bone)}
+.day-tab.active{color:var(--ink);background:var(--volt)}
+.day-tab.today::after{content:"•";color:var(--ember);position:absolute;top:6px;right:8px}
+.day-tab.active.today::after{color:var(--ink)}
+.sched-filters{display:flex;gap:10px;flex-wrap:wrap;padding:20px 24px;border-bottom:1px solid var(--line)}
+.f-chip{background:none;border:1px solid var(--line-strong);color:var(--dim);font-family:var(--mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;padding:8px 14px;transition:.25s}
+.f-chip:hover{color:var(--bone);border-color:var(--bone)}
+.f-chip.active{background:var(--volt);color:var(--ink);border-color:var(--volt)}
+.sched-row{display:grid;grid-template-columns:78px 1.5fr 1fr .9fr 1fr auto;gap:18px;align-items:center;
+  padding:18px 24px;border-bottom:1px solid var(--line);transition:background .2s}
+.sched-row:hover{background:rgba(215,255,62,.04)}
+.sched-row:last-child{border-bottom:none}
+.s-time{font-family:var(--mono);font-size:.85rem;color:var(--volt)}
+.s-name{font-weight:700}
+.s-name em{display:block;font-style:normal;font-weight:400;font-size:.74rem;color:var(--dim)}
+.s-coach,.s-room{font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
+.s-int{display:flex;gap:3px;align-items:center}
+.s-int i{width:5px;height:14px;background:var(--line)}
+.s-int i.on{background:var(--volt)}
+.s-int.hot i.on{background:var(--ember)}
+.s-seats{font-family:var(--mono);font-size:.7rem;letter-spacing:.08em}
+.s-seats.low{color:var(--ember)}
+.reserve{font-family:var(--mono);font-size:.64rem;letter-spacing:.14em;text-transform:uppercase;padding:11px 18px;
+  background:none;border:1px solid var(--line-strong);color:var(--bone);transition:.25s;white-space:nowrap}
+.reserve:hover{background:var(--volt);color:var(--ink);border-color:var(--volt)}
+.reserve.done{background:transparent;border-color:var(--volt);color:var(--volt);cursor:default}
+.reserve.full{opacity:.3;cursor:not-allowed;border-style:dashed}
+.sched-empty{padding:60px 24px;text-align:center;color:var(--dim);font-family:var(--mono);font-size:.75rem;letter-spacing:.14em}
+.sched-note{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:16px 24px;border-top:1px solid var(--line);color:var(--dim)}
+
+/* ============ COACHES ============ */
+.rail-wrap{position:relative}
+.rail{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:20px;scrollbar-width:none}
+.rail::-webkit-scrollbar{display:none}
+.coach{flex:0 0 290px;scroll-snap-align:start;border:1px solid var(--line);background:var(--coal);transition:transform .4s,border-color .4s}
+.coach:hover{transform:translateY(-8px);border-color:var(--volt)}
+.coach .cm{overflow:hidden;height:340px}
+.coach img{width:100%;height:100%;object-fit:cover;filter:grayscale(1) contrast(1.15);transition:filter .5s,transform .8s}
+.coach:hover img{filter:grayscale(0);transform:scale(1.05)}
+.coach .cb{padding:20px;border-top:1px solid var(--line)}
+.coach h3{font-size:1.4rem}
+.coach .role{color:var(--volt);margin:6px 0 10px}
+.coach .pb{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;color:var(--dim);border-top:1px dashed var(--line);padding-top:10px}
+.rail-btns{display:flex;gap:10px}
+.rail-btn{width:48px;height:48px;border:1px solid var(--line-strong);background:none;color:var(--bone);font-size:1.1rem;transition:.25s}
+.rail-btn:hover{background:var(--volt);color:var(--ink);border-color:var(--volt)}
+
+/* ============ MEMBERSHIP ============ */
+.bill-toggle{display:flex;align-items:center;gap:16px;font-family:var(--mono);font-size:.7rem;letter-spacing:.14em}
+.switch{width:64px;height:32px;border:1px solid var(--line-strong);background:var(--coal);position:relative;cursor:pointer;flex:none}
+.switch i{position:absolute;top:3px;left:3px;width:24px;height:24px;background:var(--volt);transition:left .3s cubic-bezier(.77,0,.18,1)}
+.switch.on i{left:35px}
+.save-tag{color:var(--volt)}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch;margin-top:56px}
+.tier{border:1px solid var(--line);background:var(--coal);padding:40px 34px;display:flex;flex-direction:column;gap:26px;position:relative;transition:transform .35s,border-color .35s}
+.tier:hover{transform:translateY(-6px)}
+.tier.hero-tier{background:var(--volt);color:var(--ink);transform:scale(1.03);border-color:var(--volt)}
+.tier.hero-tier:hover{transform:scale(1.03) translateY(-6px)}
+.tier.hero-tier .dim{color:rgba(11,11,12,.65)}
+.tier .flag{position:absolute;top:-13px;left:34px;background:var(--ink);color:var(--volt);font-family:var(--mono);font-size:.6rem;letter-spacing:.2em;padding:6px 12px}
+.tier h3{font-size:1.8rem}
+.price-row{display:flex;align-items:baseline;gap:8px}
+.price{font-family:var(--disp);font-size:3.6rem;line-height:1;display:inline-block}
+.price.flip{animation:flipP .3s ease}
+@keyframes flipP{0%{opacity:1;transform:none}45%{opacity:0;transform:translateY(-14px)}55%{opacity:0;transform:translateY(14px)}100%{opacity:1;transform:none}}
+.per{font-family:var(--mono);font-size:.68rem;letter-spacing:.12em}
+.tier ul{list-style:none;display:flex;flex-direction:column;gap:12px;flex:1}
+.tier li{display:flex;gap:12px;font-size:.9rem;align-items:baseline}
+.tier li::before{content:"▪";color:var(--volt);font-size:.7rem}
+.tier.hero-tier li::before{color:var(--ink)}
+.tier li.no{opacity:.35;text-decoration:line-through}
+.tier li.no::before{content:"✕"}
+.tier .btn{justify-content:center}
+.tier.hero-tier .btn{background:var(--ink);color:var(--volt);border-color:var(--ink)}
+.tier.hero-tier .btn:hover{background:var(--coal)}
+
+/* ============ PROOF ============ */
+.proof{background:var(--coal);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.quote-box{max-width:880px;margin:0 auto;text-align:left;position:relative;min-height:230px}
+.quote-mark{font-family:var(--disp);font-size:6rem;color:var(--volt);line-height:.5;display:block;margin-bottom:30px}
+#quoteText{font-size:clamp(1.3rem,2.6vw,2rem);line-height:1.4;font-weight:500;transition:opacity .4s,transform .4s}
+.quote-meta{display:flex;align-items:center;gap:16px;margin-top:34px;transition:opacity .4s}
+.quote-meta img{width:52px;height:52px;border-radius:50%;object-fit:cover;filter:grayscale(1)}
+.quote-meta .who b{display:block}
+.quote-meta .stat-tag{margin-left:auto;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;color:var(--ink);background:var(--volt);padding:8px 12px}
+.quote-ctrl{display:flex;align-items:center;gap:18px;max-width:880px;margin:40px auto 0}
+.q-bar{flex:1;height:2px;background:var(--line);overflow:hidden}
+.q-bar span{display:block;height:100%;width:0;background:var(--volt)}
+.q-arrows{display:flex;gap:8px}
+.q-arrows button{width:44px;height:44px;border:1px solid var(--line-strong);background:none;color:var(--bone);transition:.25s}
+.q-arrows button:hover{background:var(--volt);color:var(--ink);border-color:var(--volt)}
+
+/* ============ FAQ ============ */
+.faq{max-width:860px;margin:0 auto}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{width:100%;background:none;border:none;color:var(--bone);display:flex;justify-content:space-between;align-items:center;gap:20px;
+  padding:26px 4px;text-align:left;font-family:var(--body);font-size:1.1rem;font-weight:700;transition:color .25s}
+.faq-q:hover{color:var(--volt)}
+.faq-q .x{font-family:var(--mono);font-size:1.3rem;color:var(--volt);transition:transform .35s;flex:none}
+.faq-item.open .faq-q .x{transform:rotate(45deg)}
+.faq-a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .45s cubic-bezier(.19,1,.22,1)}
+.faq-item.open .faq-a{grid-template-rows:1fr}
+.faq-a>div{overflow:hidden}
+.faq-a p{color:var(--dim);padding:0 4px 26px;max-width:640px}
+
+/* ============ BOOKING ============ */
+.book-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:70px;align-items:start}
+.book-left{position:sticky;top:calc(var(--nav) + 40px)}
+.book-left p{color:var(--dim);margin:22px 0 30px;max-width:360px}
+.perk-list{list-style:none;border-top:1px solid var(--line)}
+.perk-list li{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.perk-list li b{color:var(--volt);font-family:var(--mono);font-weight:400;font-size:.7rem;flex:none;padding-top:3px}
+.form-panel{background:var(--coal);border:1px solid var(--line);padding:44px;position:relative}
+.form-panel::before{content:"";position:absolute;top:-8px;left:-8px;width:calc(100% + 16px);height:8px;
+  background:repeating-linear-gradient(45deg,var(--ember) 0 10px,transparent 10px 20px)}
+.f-row{margin-bottom:24px}
+.f-row label{display:block;font-family:var(--mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;color:var(--dim);margin-bottom:10px}
+.f-row input,.f-row select{width:100%;background:var(--ink);border:1px solid var(--line-strong);color:var(--bone);
+  padding:15px 16px;font-family:var(--body);font-size:.95rem;transition:border-color .25s;border-radius:0;-webkit-appearance:none}
+.f-row select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6'%3E%3Cpath d='M0 0l5 6 5-6z' fill='%23d7ff3e'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center}
+.f-row input:focus,.f-row select:focus{outline:none;border-color:var(--volt)}
+.f-row.err input{border-color:var(--ember);animation:shake .35s}
+.f-msg{color:var(--ember);font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;margin-top:8px;display:none}
+.f-row.err .f-msg{display:block}
+@keyframes shake{0%,100%{transform:none}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.f-2{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.success{display:none;text-align:left}
+.success.show{display:block;animation:fadeUp .6s cubic-bezier(.19,1,.22,1)}
+@keyframes fadeUp{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:none}}
+.pass-code{font-family:var(--disp);font-size:clamp(2.6rem,5vw,4rem);color:var(--volt);margin:14px 0 6px}
+.pass-line{display:flex;justify-content:space-between;gap:14px;border-top:1px dashed var(--line);padding:12px 0;font-size:.92rem;flex-wrap:wrap}
+.pass-line .mono{color:var(--dim)}
+
+/* ============ FOOTER ============ */
+footer{border-top:1px solid var(--line);background:var(--coal)}
+.foot-word{font-family:var(--disp);font-size:clamp(3.4rem,13vw,11.5rem);text-transform:uppercase;line-height:.9;text-align:center;
+  color:transparent;-webkit-text-stroke:1px rgba(237,234,226,.25);padding:64px 0 24px;user-select:none;transition:color .6s,-webkit-text-stroke .6s}
+.foot-word:hover{color:var(--volt);-webkit-text-stroke:1px var(--volt)}
+.foot-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr 1.2fr;gap:40px;padding:50px 0;border-top:1px solid var(--line)}
+.foot-grid h4{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;color:var(--volt);margin-bottom:20px;font-weight:600}
+.hours-row{display:flex;justify-content:space-between;font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;padding:7px 0;border-bottom:1px dashed var(--line);color:var(--dim)}
+.hours-row b{color:var(--bone);font-weight:400}
+.foot-links{list-style:none;display:flex;flex-direction:column;gap:12px}
+.foot-links a{color:var(--dim);font-size:.92rem;transition:color .25s,padding .25s}
+.foot-links a:hover{color:var(--volt);padding-left:6px}
+.news-row{display:flex;border:1px solid var(--line-strong);margin-top:14px}
+.news-row input{flex:1;background:none;border:none;color:var(--bone);padding:14px 16px;font-family:var(--body);min-width:0}
+.news-row input:focus{outline:none}
+.news-row button{background:var(--volt);border:none;color:var(--ink);font-family:var(--mono);font-size:.66rem;letter-spacing:.14em;padding:0 20px;transition:background .25s}
+.news-row button:hover{background:var(--bone)}
+.foot-bottom{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;padding:24px 0;border-top:1px solid var(--line);color:var(--dim)}
+
+/* ============ TOAST ============ */
+#toastZone{position:fixed;bottom:24px;left:24px;z-index:2500;display:flex;flex-direction:column;gap:10px}
+.toast{background:var(--coal);border:1px solid var(--volt);border-left-width:6px;padding:16px 20px;max-width:360px;
+  display:flex;gap:14px;align-items:flex-start;animation:toastIn .45s cubic-bezier(.19,1,.22,1)}
+.toast.out{animation:toastOut .35s forwards}
+.toast .tk{font-family:var(--mono);font-size:.6rem;letter-spacing:.18em;color:var(--volt);display:block;margin-bottom:4px}
+.toast p{font-size:.86rem;line-height:1.45}
+@keyframes toastIn{from{opacity:0;transform:translateX(-30px)}to{opacity:1;transform:none}}
+@keyframes toastOut{to{opacity:0;transform:translateY(14px)}}
+
+/* ============ REVEAL ============ */
+.reveal{opacity:0;transform:translateY(34px);transition:opacity .8s ease,transform .8s cubic-bezier(.19,1,.22,1)}
+.reveal.inview{opacity:1;transform:none}
+
+/* ============ RESPONSIVE ============ */
+@media(max-width:1080px){
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .hero-bg{width:100%;opacity:.4}
+  .prog-grid{grid-template-columns:1fr;gap:44px}
+  .prog-sticky{position:static}
+  .book-grid{grid-template-columns:1fr;gap:44px}
+  .book-left{position:static}
+  .tiers{grid-template-columns:1fr;max-width:560px;margin-left:auto;margin-right:auto}
+  .tier.hero-tier{transform:none}
+  .foot-grid{grid-template-columns:1fr 1fr}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .stat{border-top:1px solid var(--line)}
+  .stat:nth-child(-n+2){border-top:none}
+  .stat:nth-child(3){border-left:none}
+}
+@media(max-width:760px){
+  .nav-links,.nav-cta .open-dot{display:none}
+  .burger{display:flex}
+  .p-card{grid-template-columns:1fr}
+  .sched-row{grid-template-columns:64px 1fr auto;row-gap:8px}
+  .s-coach,.s-room,.s-int-wrap{display:none}
+  .floor-field{grid-template-columns:1fr 1fr;gap:26px}
+  .pl-1,.pl-2,.pl-3,.pl-4,.pl-5,.pl-6{grid-column:auto;margin-top:0}
+  .form-panel{padding:28px}
+  .f-2{grid-template-columns:1fr}
+  .foot-grid{grid-template-columns:1fr}
+  .stats-grid{grid-template-columns:1fr}
+  .stat{border-left:none}
+  .sec{padding:80px 0}
+}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
+  html{scroll-behavior:auto}
+  .reveal,.lm>span{opacity:1!important;transform:none!important}
+  .ticker-track,.giant-track{animation:none;flex-wrap:wrap}
+}
+</style>
+</head>
+<body>
+
+<div class="noise" aria-hidden="true"></div>
+<div id="progress" aria-hidden="true"></div>
+
+<!-- TICKER -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track mono" id="tickerTrack">
+    <span>OPEN 24/7 — MEMBERS WITH KEYCARD <b>◆</b></span>
+    <span>FOUNDING RATES END AUG 31 <b>◆</b></span>
+    <span>HYROX PREP BLOCK STARTS MONDAY <b>◆</b></span>
+    <span>SAUNA + COLD PLUNGE NOW LIVE <b>◆</b></span>
+    <span>FIRST WEEK FREE — NO CARD NEEDED <b>◆</b></span>
+    <span>OPEN 24/7 — MEMBERS WITH KEYCARD <b>◆</b></span>
+    <span>FOUNDING RATES END AUG 31 <b>◆</b></span>
+    <span>HYROX PREP BLOCK STARTS MONDAY <b>◆</b></span>
+    <span>SAUNA + COLD PLUNGE NOW LIVE <b>◆</b></span>
+    <span>FIRST WEEK FREE — NO CARD NEEDED <b>◆</b></span>
+  </div>
+</div>
+
+<!-- NAV -->
+<header id="siteHeader">
+  <div class="wrap nav">
+    <a class="logo" href="#top" id="logo"><i></i>IRONWORKS</a>
+    <nav class="nav-links" aria-label="Primary">
+      <a href="#programs">Programs</a>
+      <a href="#floor">The Floor</a>
+      <a href="#schedule">Schedule</a>
+      <a href="#coaches">Coaches</a>
+      <a href="#membership">Membership</a>
+    </nav>
+    <div class="nav-cta">
+      <span class="mono open-dot"><i></i>OPEN NOW</span>
+      <a class="btn btn-volt btn-sm magnetic" href="#book">Start Free Week</a>
+      <button class="burger" id="burger" aria-label="Menu" aria-expanded="false"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-menu" id="mobileMenu" aria-label="Mobile">
+  <a href="#programs" style="transition-delay:.1s">Programs</a>
+  <a href="#floor" style="transition-delay:.16s">The Floor</a>
+  <a href="#schedule" style="transition-delay:.22s">Schedule</a>
+  <a href="#coaches" style="transition-delay:.28s">Coaches</a>
+  <a href="#membership" style="transition-delay:.34s">Membership</a>
+  <a href="#book" class="volt" style="transition-delay:.4s">Start Free Week →</a>
+</nav>
+
+<main id="top">
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" aria-hidden="true"><img src="https://picsum.photos/seed/gym1/1600/1000" alt="Gym interior"></div>
+  <div class="wrap hero-grid">
+    <div class="hero-copy" id="heroCopy">
+      <div class="kicker"><span class="rule"></span><span class="mono dim" id="heroKicker" data-text="DISTRICT FOUNDRY · EST. 2014 · OPEN 24/7">DISTRICT FOUNDRY · EST. 2014 · OPEN 24/7</span></div>
+      <h1>
+        <span class="lm"><span>TRAIN</span></span>
+        <span class="lm"><span>LIKE IT'S</span></span>
+        <span class="lm"><span class="volt">PERSONAL.</span></span>
+      </h1>
+      <p class="hero-sub">2,400 m² of iron, turf and engines. No mirrors-and-selfies floor — a working foundry where coaches program every session and nobody coasts.</p>
+      <div class="hero-actions">
+        <a class="btn btn-volt magnetic" href="#book">Claim Free Week <span class="arr">↗</span></a>
+        <a class="btn magnetic" href="#schedule">Today's Board <span class="arr">↓</span></a>
+      </div>
+      <div class="scramble-line mono" id="scrambleLine" data-text="PULL ▸ PRESS ▸ SQUAT  CARRY ▸ REPEAT">PULL ▸ PRESS ▸ SQUAT ▸ CARRY ▸ REPEAT</div>
+    </div>
+
+    <aside class="board reveal" aria-label="Live class board">
+      <div class="board-head"><span class="dot"></span><span class="mono">LIVE BOARD — <span id="boardDate">TODAY</span></span></div>
+      <div class="board-next">
+        <div>
+          <div class="mono dim">NEXT UP</div>
+          <div class="cls" id="nextClassName">—</div>
+          <div class="mono dim" id="nextClassMeta">&nbsp;</div>
+        </div>
+        <div class="countdown" id="countdown">--:--:--</div>
+      </div>
+      <ul id="boardList"></ul>
+      <div class="board-foot">
+        <span class="mono dim">BOARD REFRESHES LIVE</span>
+        <a class="mono volt" href="#schedule">FULL SCHEDULE ↘</a>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="stats">
+  <div class="wrap stats-grid">
+    <div class="stat reveal"><div class="num" data-count="1240" data-suffix="+">0</div><div class="mono lbl">ACTIVE MEMBERS</div></div>
+    <div class="stat reveal"><div class="num" data-count="62">0</div><div class="mono lbl">CLASSES / WEEK</div></div>
+    <div class="stat reveal"><div class="num" data-count="18">0</div><div class="mono lbl">SALARIED COACHES</div></div>
+    <div class="stat reveal"><div class="num" data-count="2400" data-suffix=" m²">0</div><div class="mono lbl">OF TRAINING FLOOR</div></div>
+  </div>
+</section>
+
+<!-- PROGRAMS -->
+<section class="sec" id="programs">
+  <div class="wrap prog-grid">
+    <div class="prog-sticky">
+      <div class="sec-index"><span class="rule"></span><span class="mono dim">01 / PROGRAMS</span></div>
+      <h2 class="reveal">FIVE WAYS<br>TO SUFFER<br><span class="volt">BEAUTIFULLY</span></h2>
+      <p class="reveal">Every program runs in 8-week blocks with testing days, progressions and a coach who knows your name and your knees.</p>
+      <ul class="prog-index reveal">
+        <li><b>01</b> STRENGTH &amp; POWER — THE FORGE</li>
+        <li><b>02</b> ENGINE ROOM / HIIT — BAY 2</li>
+        <li><b>03</b> MOBILITY &amp; RECOVERY — STUDIO N</li>
+        <li><b>04</b> COMBAT CONDITIONING — THE PIT</li>
+        <li><b>05</b> HYROX RACE PREP — THE TRACK</li>
+      </ul>
+    </div>
+    <div class="stack">
+      <article class="p-card">
+        <div class="p-media"><img src="https://picsum.photos/seed/gym2/900/720" alt="Strength training"></div>
+        <div class="p-body">
+          <div><div class="p-num dim">BLOCK 01</div><h3>Strength &amp; Power</h3></div>
+          <p class="dim">Barbell-first programming across squat, hinge, press and pull. Percentage-based cycles with platforms, blocks and chains.</p>
+          <div><div class="chips"><span class="chip">60 MIN</span><span class="chip">ALL LEVELS</span><span class="chip">BARBELL</span></div>
+          <p style="margin-top:18px"><a class="mono volt" href="#schedule">SEE SESSIONS ↘</a></p></div>
+        </div>
+      </article>
+      <article class="p-card alt">
+        <div class="p-media"><img src="https://picsum.photos/seed/gym3/900/720" alt="HIIT workout"></div>
+        <div class="p-body">
+          <div><div class="p-num dim">BLOCK 02</div><h3>Engine Room</h3></div>
+          <p class="dim">Intervals on ergs, sleds and turf. Heart-rate zones on the big screen, PB board on the wall, nowhere to hide.</p>
+          <div><div class="chips"><span class="chip">45 MIN</span><span class="chip">ZONES 4–5</span><span class="chip">SWEAT</span></div>
+          <p style="margin-top:18px"><a class="mono" href="#schedule" style="color:#141414">SEE SESSIONS </a></p></div>
+        </div>
+      </article>
+      <article class="p-card">
+        <div class="p-media"><img src="https://picsum.photos/seed/gym4/900/720" alt="Mobility training"></div>
+        <div class="p-body">
+          <div><div class="p-num dim">BLOCK 03</div><h3>Mobility &amp; Recovery</h3></div>
+          <p class="dim">Breath work, loaded stretching and joint prep. The quiet room with the loud results — paired with sauna and cold plunge.</p>
+          <div><div class="chips"><span class="chip">50 MIN</span><span class="chip">LOW INTENSITY</span><span class="chip">BREATH</span></div>
+          <p style="margin-top:18px"><a class="mono volt" href="#schedule">SEE SESSIONS ↘</a></p></div>
+        </div>
+      </article>
+      <article class="p-card volted">
+        <div class="p-media"><img src="https://picsum.photos/seed/gym5/900/720" alt="Combat training"></div>
+        <div class="p-body">
+          <div><div class="p-num dim">BLOCK 04</div><h3>Combat Conditioning</h3></div>
+          <p class="dim">Bags, pads and footwork drills from fight-camp programming. Technique first, cardio second, stress relief guaranteed.</p>
+          <div><div class="chips"><span class="chip">60 MIN</span><span class="chip">GLOVES PROVIDED</span><span class="chip">GRIT</span></div>
+          <p style="margin-top:18px"><a class="mono" href="#schedule" style="color:#141414">SEE SESSIONS ↘</a></p></div>
+        </div>
+      </article>
+      <article class="p-card">
+        <div class="p-media"><img src="https://picsum.photos/seed/gym6/900/720" alt="HYROX training"></div>
+        <div class="p-body">
+          <div><div class="p-num dim">BLOCK 05</div><h3>HYROX Race Prep</h3></div>
+          <p class="dim">Full race simulation: runs, sleds, wall balls, carries. We field a relay team at every national event — you're coming.</p>
+          <div><div class="chips"><span class="chip">75 MIN</span><span class="chip">RACE BLOCKS</span><span class="chip">TEAM</span></div>
+          <p style="margin-top:18px"><a class="mono volt" href="#schedule">SEE SESSIONS ↘</a></p></div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- GIANT MARQUEE -->
+<div class="giant-marq" aria-hidden="true">
+  <div class="giant-track">
+    <span>STRENGTH <b></b> ENGINE <b>✕</b> MOBILITY <b>✕</b> COMBAT <b>✕</b> </span>
+    <span>STRENGTH <b></b> ENGINE <b>✕</b> MOBILITY <b>✕</b> COMBAT <b>✕</b> </span>
+  </div>
+</div>
+
+<!-- THE FLOOR -->
+<section class="sec" id="floor">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="sec-index"><span class="rule"></span><span class="mono dim">02 / THE FLOOR</span></div>
+        <h2 class="reveal">BUILT LIKE A<br>WORKSHOP, NOT A<br><span class="volt">SHOWROOM</span></h2>
+      </div>
+      <p class="sec-lede reveal">Eight platforms, a 40-metre turf lane, a combat pit and a recovery corner that earns its keep. Drag your eyes around — it all works.</p>
+    </div>
+    <div class="floor-field">
+      <figure class="polaroid pl-1 reveal"><img src="https://picsum.photos/seed/gym7/640/460" alt="Lifting platforms" loading="lazy"><figcaption><span>PLATFORM ROW</span><span>№ 01</span></figcaption></figure>
+      <figure class="polaroid pl-2 reveal"><img src="https://picsum.photos/seed/gym8/640/460" alt="Turf sled lane" loading="lazy"><figcaption><span>40M TURF LANE</span><span>№ 02</span></figcaption></figure>
+      <figure class="polaroid pl-3 reveal"><img src="https://picsum.photos/seed/gym9/640/460" alt="Combat pit" loading="lazy"><figcaption><span>THE PIT</span><span>№ 03</span></figcaption></figure>
+      <figure class="polaroid pl-4 reveal"><img src="https://picsum.photos/seed/gym10/640/460" alt="Sauna recovery" loading="lazy"><figcaption><span>SAUNA + PLUNGE</span><span>№ 04</span></figcaption></figure>
+      <figure class="polaroid pl-5 reveal"><img src="https://picsum.photos/seed/gym11/640/460" alt="Dumbbell wall" loading="lazy"><figcaption><span>IRON LIBRARY</span><span>№ 05</span></figcaption></figure>
+      <figure class="polaroid pl-6 reveal"><img src="https://picsum.photos/seed/gym12/640/460" alt="Indoor track" loading="lazy"><figcaption><span>THE TRACK</span><span>№ 06</span></figcaption></figure>
+    </div>
+  </div>
+</section>
+
+<!-- SCHEDULE -->
+<section class="sec" id="schedule" style="padding-top:60px">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="sec-index"><span class="rule"></span><span class="mono dim">03 / SCHEDULE</span></div>
+        <h2 class="reveal">THE BOARD.<br><span class="volt">PICK YOUR POISON.</span></h2>
+      </div>
+      <p class="sec-lede reveal">Reservations hold your spot — tap reserve and it's yours. Members book 7 days ahead; trial week rides free.</p>
+    </div>
+    <div class="sched-panel reveal">
+      <div class="sched-tabs" id="dayTabs" role="tablist"></div>
+      <div class="sched-filters" id="filterChips">
+        <button class="f-chip active" data-cat="all">All</button>
+        <button class="f-chip" data-cat="strength">Strength</button>
+        <button class="f-chip" data-cat="engine">Engine / HIIT</button>
+        <button class="f-chip" data-cat="mobility">Mobility</button>
+        <button class="f-chip" data-cat="combat">Combat</button>
+        <button class="f-chip" data-cat="hyrox">Hyrox</button>
+      </div>
+      <div id="schedBody"></div>
+      <div class="sched-note">
+        <span class="mono">◼ INTENSITY SCALE: 1 = BREATHE · 5 = SURVIVE</span>
+        <span class="mono">DOORS OPEN 15 MIN BEFORE CLASS</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COACHES -->
+<section class="sec" id="coaches">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="sec-index"><span class="rule"></span><span class="mono dim">04 / COACHES</span></div>
+        <h2 class="reveal">THE PEOPLE WHO<br><span class="volt">WON'T LET GO</span></h2>
+      </div>
+      <div class="rail-btns reveal">
+        <button class="rail-btn" id="railPrev" aria-label="Previous">←</button>
+        <button class="rail-btn" id="railNext" aria-label="Next">→</button>
+      </div>
+    </div>
+    <div class="rail-wrap">
+      <div class="rail" id="coachRail">
+        <article class="coach reveal"><div class="cm"><img src="https://picsum.photos/seed/person1/520/680" alt="Coach Mara Voss" loading="lazy"></div>
+          <div class="cb"><h3>Mara Voss</h3><div class="role mono">HEAD OF STRENGTH</div><p class="dim" style="font-size:.85rem">10 yrs powerlifting coaching. Believes your warm-up is a lie.</p><div class="pb">PB — DL 252.5 KG · IPF NATIONALS</div></div></article>
+        <article class="coach reveal"><div class="cm"><img src="https://picsum.photos/seed/person2/520/680" alt="Coach Dre Santos" loading="lazy"></div>
+          <div class="cb"><h3>Dre Santos</h3><div class="role mono">ENGINE + HYROX</div><p class="dim" style="font-size:.85rem">Ex-rower, 4× HYROX finisher. Owns a stopwatch and no mercy.</p><div class="pb">PB — 2K ERG 5:58</div></div></article>
+        <article class="coach reveal"><div class="cm"><img src="https://picsum.photos/seed/person3/520/680" alt="Coach Ines Okafor" loading="lazy"></div>
+          <div class="cb"><h3>Ines Okafor</h3><div class="role mono">MOBILITY + RUN</div><p class="dim" style="font-size:.85rem">Physio-turned-coach. Rebuilds hips and half-marathons alike.</p><div class="pb">PB — HM 1:24 · DPT</div></div></article>
+        <article class="coach reveal"><div class="cm"><img src="https://picsum.photos/seed/person4/520/680" alt="Coach Yuri Volkov" loading="lazy"></div>
+          <div class="cb"><h3>Yuri Volkov</h3><div class="role mono">COMBAT CONDITIONING</div><p class="dim" style="font-size:.85rem">14 amateur bouts. Teaches footwork before fear.</p><div class="pb">RECORD — 12–2 AM BOXING</div></div></article>
+        <article class="coach reveal"><div class="cm"><img src="https://picsum.photos/seed/person5/520/680" alt="Coach Tom Hale" loading="lazy"></div>
+          <div class="cb"><h3>"Big" Tom Hale</h3><div class="role mono">POWERLIFTING CLUB</div><p class="dim" style="font-size:.85rem">Runs the Friday night squat party since 2016. Bring earplugs.</p><div class="pb">PB — SQ 320 KG RAW</div></div></article>
+        <article class="coach reveal"><div class="cm"><img src="https://picsum.photos/seed/person6/520/680" alt="Coach Lena Brandt" loading="lazy"></div>
+          <div class="cb"><h3>Lena Brandt</h3><div class="role mono">OLYMPIC LIFTING</div><p class="dim" style="font-size:.85rem">Former national junior. Will film your snatch and roast it kindly.</p><div class="pb">PB — C&amp;J 118 KG</div></div></article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MEMBERSHIP -->
+<section class="sec" id="membership">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <div class="sec-index"><span class="rule"></span><span class="mono dim">05 / MEMBERSHIP</span></div>
+        <h2 class="reveal">PICK YOUR<br><span class="volt">LEVEL OF COMMITMENT</span></h2>
+      </div>
+      <div class="bill-toggle reveal">
+        <span id="lblMonthly" style="color:var(--bone)">MONTHLY</span>
+        <button class="switch" id="billSwitch" role="switch" aria-checked="false" aria-label="Toggle annual billing"><i></i></button>
+        <span id="lblAnnual" class="dim">ANNUAL <span class="save-tag">— 2 MONTHS FREE</span></span>
+      </div>
+    </div>
+    <div class="tiers">
+      <article class="tier reveal">
+        <div><h3>Day One</h3><p class="mono dim" style="margin-top:8px">FOR THE FIRST REP</p></div>
+        <div class="price-row"><span class="price" data-m="49" data-a="41">€49</span><span class="per dim">/ MO</span></div>
+        <ul>
+          <li>24/7 gym floor access</li>
+          <li>2 group classes / week</li>
+          <li>Free day lockers</li>
+          <li>Intro session with a coach</li>
+          <li class="no">Recovery corner (sauna + plunge)</li>
+          <li class="no">Programming app</li>
+        </ul>
+        <a class="btn magnetic" href="#book">Start With Day One <span class="arr">↗</span></a>
+      </article>
+      <article class="tier hero-tier reveal">
+        <span class="flag">MOST TAKEN — 71%</span>
+        <div><h3>All In</h3><p class="mono dim" style="margin-top:8px">FOR THE OBSESSED</p></div>
+        <div class="price-row"><span class="price" data-m="89" data-a="74">€89</span><span class="per dim">/ MO</span></div>
+        <ul>
+          <li>Everything in Day One</li>
+          <li>Unlimited classes, all programs</li>
+          <li>Recovery corner — sauna + cold plunge</li>
+          <li>Programming app with your block</li>
+          <li>1 guest pass / month</li>
+          <li>Quarterly test day entry</li>
+        </ul>
+        <a class="btn magnetic" href="#book">Go All In <span class="arr">↗</span></a>
+      </article>
+      <article class="tier reveal">
+        <div><h3>Foundry+</h3><p class="mono dim" style="margin-top:8px">FOR THE ALL-TIME RECORDS</p></div>
+        <div class="price-row"><span class="price" data-m="159" data-a="133">€159</span><span class="per dim">/ MO</span></div>
+        <ul>
+          <li>Everything in All In</li>
+          <li>2 × 1-on-1 PT sessions / month</li>
+          <li>Quarterly InBody scan + review</li>
+          <li>Priority booking window (10 days)</li>
+          <li>Towel service + branded locker</li>
+          <li>Event credits — HYROX, meets, camps</li>
+        </ul>
+        <a class="btn magnetic" href="#book">Enter The Foundry <span class="arr">↗</span></a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- PROOF -->
+<section class="sec proof">
+  <div class="wrap">
+    <div class="quote-box" id="quoteBox">
+      <span class="quote-mark" aria-hidden="true">"</span>
+      <p id="quoteText">I came for the deadlifts. I stayed because at 6 a.m. nobody here lets you coast — the coaches remember your numbers better than you do.</p>
+      <div class="quote-meta" id="quoteMeta">
+        <img id="quoteImg" src="https://picsum.photos/seed/member1/200/200" alt="Member portrait">
+        <div class="who"><b id="quoteWho">Priya N.</b><span class="mono dim" id="quoteSince">MEMBER SINCE 2022</span></div>
+        <span class="stat-tag" id="quoteStat">PB · 150 KG DEADLIFT</span>
+      </div>
+    </div>
+    <div class="quote-ctrl">
+      <div class="q-bar"><span id="qBar"></span></div>
+      <div class="q-arrows">
+        <button id="qPrev" aria-label="Previous quote">←</button>
+        <button id="qNext" aria-label="Next quote">→</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="sec" id="faq">
+  <div class="wrap">
+    <div class="sec-head" style="justify-content:center;text-align:center">
+      <div style="width:100%">
+        <div class="sec-index" style="justify-content:center"><span class="rule"></span><span class="mono dim">06 / QUESTIONS</span><span class="rule"></span></div>
+        <h2 class="reveal">ASKED AT THE FRONT DESK,<br><span class="volt">DAILY</span></h2>
+      </div>
+    </div>
+    <div class="faq">
+      <div class="faq-item reveal"><button class="faq-q">I've never lifted. Will I be completely lost?<span class="x">+</span></button>
+        <div class="faq-a"><div><p>No. Every new member starts with <b>Fundamentals</b> — three included onboarding sessions covering the six main lifts, our floor layout and how to read the board. You graduate to classes with a coach's sign-off, usually within ten days.</p></div></div></div>
+      <div class="faq-item reveal"><button class="faq-q">Do I need to reserve a spot for classes?<span class="x">+</span></button>
+        <div class="faq-a"><div><p>Yes — caps are 12–16 per class so coaches can actually coach. Reservations open 7 days out (10 for Foundry+). Cancel up to 2 hours before and your spot releases without penalty.</p></div></div></div>
+      <div class="faq-item reveal"><button class="faq-q">Showers, lockers, towels — the important stuff?<span class="x">+</span></button>
+        <div class="faq-a"><div><p>Free day lockers and rain-proof bike parking for everyone. All In adds the recovery corner; Foundry+ adds a personal branded locker and towel service. Hair dryers exist. Excuses don't.</p></div></div></div>
+      <div class="faq-item reveal"><button class="faq-q">Can I pause my membership?<span class="x">+</span></button>
+        <div class="faq-a"><div><p>Yes — up to 8 weeks per year, self-serve from your account, in blocks of one week. Injuries, travel, life: the bar will wait.</p></div></div></div>
+      <div class="faq-item reveal"><button class="faq-q">What exactly is the free week?<span class="x">+</span></button>
+        <div class="faq-a"><div><p>Seven days, unlimited classes, full floor access and a 30-minute consult with a coach — no card required. About 60% of our current members started this way. Come see why.</p></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- BOOKING -->
+<section class="sec" id="book" style="background:var(--coal);border-top:1px solid var(--line)">
+  <div class="wrap book-grid">
+    <div class="book-left">
+      <div class="sec-index"><span class="rule"></span><span class="mono dim">07 / FREE WEEK</span></div>
+      <h2 class="reveal">YOUR FIRST WEEK<br>IS <span class="volt">ON US.</span><br>NO CARD. NO CATCH.</h2>
+      <p class="reveal">Fill the form, pick your first class, walk in. A coach meets you at the door ten minutes early — then the foundry does the rest.</p>
+      <ul class="perk-list reveal">
+        <li><b>[A]</b> 7 days of unlimited classes and floor access</li>
+        <li><b>[B]</b> 30-minute movement screen with a coach</li>
+        <li><b>[C]</b> Borrowed gloves, belts and bad jokes included</li>
+        <li><b>[D]</b> If you join after, your trial days count toward month one</li>
+      </ul>
+    </div>
+    <div class="form-panel reveal">
+      <form id="trialForm" novalidate>
+        <div class="f-2">
+          <div class="f-row" id="rowName"><label for="fName">First name</label><input id="fName" type="text" autocomplete="given-name" placeholder="Alex"><span class="f-msg">TELL US WHO'S WALKING IN</span></div>
+          <div class="f-row" id="rowEmail"><label for="fEmail">Email</label><input id="fEmail" type="email" autocomplete="email" placeholder="alex@heavy.mail"><span class="f-msg">WE NEED A REAL ADDRESS</span></div>
+        </div>
+        <div class="f-2">
+          <div class="f-row"><label for="fGoal">Main goal</label>
+            <select id="fGoal"><option>Build strength</option><option>Lose weight / get lean</option><option>Race prep — HYROX / running</option><option>Learn to lift properly</option><option>Stress relief (combat me)</option></select></div>
+          <div class="f-row"><label for="fLevel">Experience</label>
+            <select id="fLevel"><option>Complete beginner</option><option>Some gym time</option><option>Regular lifter</option><option>Competitor</option></select></div>
+        </div>
+        <div class="f-row" id="rowClass"><label for="fClass">First class</label><select id="fClass"></select><span class="f-msg">PICK YOUR FIRST SESSION</span></div>
+        <button class="btn btn-volt magnetic" type="submit" style="width:100%;justify-content:center">Lock In My Free Week <span class="arr">↗</span></button>
+        <p class="mono dim" style="margin-top:16px;text-align:center">NO CARD · NO CONTRACT · JUST SHOW UP</p>
+      </form>
+      <div class="success" id="successCard">
+        <span class="mono dim">ACCESS PASS ISSUED</span>
+        <div class="pass-code" id="passCode">IW-0000</div>
+        <div class="pass-line"><span class="mono">NAME</span><b id="passName">—</b></div>
+        <div class="pass-line"><span class="mono">FIRST SESSION</span><b id="passClass">—</b></div>
+        <div class="pass-line"><span class="mono">VALID</span><b>7 DAYS · UNLIMITED</b></div>
+        <p class="dim" style="margin:20px 0 26px;font-size:.9rem">Arrive 10 minutes early, bring water — we handle the rest. Show this code at the front desk.</p>
+        <div style="display:flex;gap:12px;flex-wrap:wrap">
+          <button class="btn btn-volt btn-sm" id="calBtn">Add To Calendar <span class="arr">↗</span></button>
+          <button class="btn btn-sm" id="againBtn">Book Another</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    <div class="foot-word" aria-hidden="true">IRONWORKS</div>
+    <div class="foot-grid">
+      <div>
+        <h4>The Foundry</h4>
+        <p style="color:var(--dim);font-size:.92rem">44 Foundry Lane, Ironworks District<br>Under the blue crane, follow the bass.</p>
+        <p class="mono" style="margin-top:18px"><a href="tel:+15550142447" style="color:var(--bone)">+1 555 014 2447</a><br>
+        <a href="mailto:front@ironworks.club" class="volt">FRONT@IRONWORKS.CLUB</a></p>
+      </div>
+      <div>
+        <h4>Staffed Hours</h4>
+        <div class="hours-row"><span>MON – FRI</span><b>06:00 – 22:00</b></div>
+        <div class="hours-row"><span>SATURDAY</span><b>08:00 – 20:00</b></div>
+        <div class="hours-row"><span>SUNDAY</span><b>08:00 – 18:00</b></div>
+        <div class="hours-row"><span>MEMBERS</span><b class="volt">24/7 KEYCARD</b></div>
+      </div>
+      <div>
+        <h4>Navigate</h4>
+        <ul class="foot-links">
+          <li><a href="#programs">Programs</a></li>
+          <li><a href="#schedule">Class Board</a></li>
+          <li><a href="#coaches">Coaches</a></li>
+          <li><a href="#membership">Membership</a></li>
+          <li><a href="#book">Free Week</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>The Friday Dispatch</h4>
+        <p style="color:var(--dim);font-size:.9rem">PB board, class drops and one training essay. Zero spam, ever.</p>
+        <div class="news-row">
+          <input type="email" id="newsEmail" placeholder="your@email.com" aria-label="Email for newsletter">
+          <button id="newsBtn">JOIN</button>
+        </div>
+        <p class="mono dim" style="margin-top:20px">IG ↗ &nbsp; YT ↗ &nbsp; STRAVA ↗</p>
+      </div>
+    </div>
+    <div class="foot-bottom mono">
+      <span>© 2026 IRONWORKS ATHLETIC CLUB — EST. 2014</span>
+      <span>NO MIRRORS. NO EGO. NO EXCUSES.</span>
+    </div>
+  </div>
+</footer>
+
+<div id="toastZone" aria-live="polite"></div>
+
+<script>
+(function(){
+"use strict";
+const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+const $ = (s,c)=> (c||document).querySelector(s);
+const $$ = (s,c)=> Array.from((c||document).querySelectorAll(s));
+const pad = n => String(n).padStart(2,"0");
+
+/* ---------- DATA ---------- */
+const PROGRAMS = {
+  STR:{name:"Strength Foundations",coach:"Mara Voss",room:"The Forge",int:4,dur:60,cat:"strength"},
+  PWR:{name:"Powerlifting Club",coach:"Big Tom Hale",room:"The Forge",int:4,dur:75,cat:"strength"},
+  OLY:{name:"Olympic Lifting",coach:"Lena Brandt",room:"Platform Row",int:4,dur:60,cat:"strength"},
+  HII:{name:"Engine Room / HIIT",coach:"Dre Santos",room:"Bay 2",int:5,dur:45,cat:"engine"},
+  RUN:{name:"Run Crew Intervals",coach:"Ines Okafor",room:"The Track",int:3,dur:50,cat:"engine"},
+  MOB:{name:"Mobility + Breath",coach:"Ines Okafor",room:"Studio North",int:2,dur:50,cat:"mobility"},
+  CMB:{name:"Combat Conditioning",coach:"Yuri Volkov",room:"The Pit",int:4,dur:60,cat:"combat"},
+  HYR:{name:"HYROX Prep",coach:"Dre Santos",room:"The Track",int:5,dur:75,cat:"hyrox"}
+};
+const WEEK = { /* getDay(): 0 Sun … 6 Sat */
+  0:[["09:30","MOB"],["10:45","RUN"],["12:00","STR"],["16:30","HII"],["18:00","OLY"]],
+  1:[["06:30","HII"],["07:30","MOB"],["09:00","STR"],["12:15","CMB"],["17:30","OLY"],["18:30","HYR"],["19:30","PWR"]],
+  2:[["06:30","STR"],["07:30","HII"],["09:00","MOB"],["12:15","RUN"],["17:30","HYR"],["18:30","CMB"],["19:30","OLY"]],
+  3:[["06:30","HII"],["07:30","PWR"],["09:00","STR"],["12:15","MOB"],["17:30","CMB"],["18:30","RUN"],["19:30","HYR"]],
+  4:[["06:30","MOB"],["07:30","HII"],["09:00","OLY"],["12:15","STR"],["17:30","PWR"],["18:30","HYR"],["19:30","CMB"]],
+  5:[["06:30","HII"],["07:30","STR"],["09:00","MOB"],["12:15","CMB"],["17:30","OLY"],["18:30","RUN"],["19:30","PWR"]],
+  6:[["09:00","HYR"],["10:15","HII"],["11:30","MOB"],["13:00","CMB"],["16:00","PWR"],["17:30","STR"]]
+};
+const DAY_LABELS = ["MON","TUE","WED","THU","FRI","SAT","SUN"];
+const DAY_IDX = [1,2,3,4,5,6,0]; // label → getDay()
+const TODAY = new Date().getDay();
+const LABEL_OF_DAY = {}; DAY_IDX.forEach((g,i)=> LABEL_OF_DAY[g]=DAY_LABELS[i]);
+
+const seatSeed = str => { let h=0; for(let i=0;i<str.length;i++){ h=(h*31 + str.charCodeAt(i))>>>0; } return h; };
+const seatsFor = (day,i)=> { const c = WEEK[day][i]; return seatSeed(day+"|"+c[0]+"|"+c[1]) % 9; };
+
+/* ---------- STATE ---------- */
+let activeDay = TODAY;
+let activeFilter = "all";
+const reserved = new Set();       // keys day|time|pid
+const seatOverride = new Map();   // keys → remaining seats
+
+const keyOf = (day,t,p)=> day+"|"+t+"|"+p;
+const remaining = (day,i)=> {
+  const k = keyOf(day, WEEK[day][i][0], WEEK[day][i][1]);
+  return seatOverride.has(k) ? seatOverride.get(k) : seatsFor(day,i);
+};
+const minsOf = t => { const [h,m]=t.split(":").map(Number); return h*60+m; };
+
+/* ---------- TOAST ---------- */
+function toast(title,msg){
+  const zone = $("#toastZone");
+  const el = document.createElement("div");
+  el.className="toast";
+  el.innerHTML = '<div><span class="tk">'+title+'</span><p>'+msg+'</p></div>';
+  zone.appendChild(el);
+  setTimeout(()=>{ el.classList.add("out"); setTimeout(()=>el.remove(),380); }, 3800);
+}
+
+/* ---------- SCHEDULE RENDER ---------- */
+function renderTabs(){
+  const wrap = $("#dayTabs");
+  wrap.innerHTML = DAY_IDX.map((g,i)=>
+    '<button class="day-tab'+(g===activeDay?' active':'')+(g===TODAY?' today':'')+'" data-day="'+g+'" role="tab">'+
+    DAY_LABELS[i]+(g===TODAY?'<span class="mono" style="display:block;font-size:.5rem;margin-top:2px">TODAY</span>':'')+'</button>'
+  ).join("");
+}
+function renderSchedule(){
+  const body = $("#schedBody");
+  const items = WEEK[activeDay].map((c,i)=>({i,t:c[0],pid:c[1],meta:PROGRAMS[c[1]]}))
+    .filter(x => activeFilter==="all" || x.meta.cat===activeFilter);
+  if(!items.length){
+    body.innerHTML = '<div class="sched-empty">// NO '+activeFilter.toUpperCase()+' SESSIONS THIS DAY — TRY ANOTHER FILTER</div>';
+    return;
+  }
+  body.innerHTML = items.map(x=>{
+    const left = remaining(activeDay, x.i);
+    const isRes = reserved.has(keyOf(activeDay,x.t,x.pid));
+    const seatTxt = left===0 ? "CLASS FULL" : left+" SPOT"+(left===1?"":"S")+" LEFT";
+    const intBars = Array.from({length:5},(_,b)=>'<i class="'+(b<x.meta.int?'on':'')+'"></i>').join("");
+    const btn = isRes
+      ? '<button class="reserve done">BOOKED ✓</button>'
+      : left===0 ? '<button class="reserve full" disabled>FULL</button>'
+      : '<button class="reserve" data-day="'+activeDay+'" data-i="'+x.i+'">RESERVE</button>';
+    return '<div class="sched-row">'+
+      '<div class="s-time">'+x.t+'</div>'+
+      '<div class="s-name">'+x.meta.name+'<em>'+x.meta.dur+' MIN · '+x.meta.room+'</em></div>'+
+      '<div class="s-coach">'+x.meta.coach+'</div>'+
+      '<div class="s-room">'+x.meta.room+'</div>'+
+      '<div class="s-int-wrap"><div class="s-int '+(x.meta.int>=5?'hot':'')+'" title="Intensity '+x.meta.int+'/5">'+intBars+'</div></div>'+
+      '<div style="display:flex;align-items:center;gap:16px;justify-content:flex-end">'+
+        '<span class="s-seats '+(left>0&&left<=2?'low':'')+'">'+seatTxt+'</span>'+btn+'</div></div>';
+  }).join("");
+}
+function reserveClass(day,i){
+  const [t,pid] = WEEK[day][i];
+  const k = keyOf(day,t,pid);
+  if(reserved.has(k)){ toast("ALREADY BOOKED", PROGRAMS[pid].name+" at "+t+" — see you there."); return; }
+  const left = remaining(day,i);
+  if(left<=0){ toast("CLASS FULL", "That one's packed. The waitlist opens at the front desk."); return; }
+  seatOverride.set(k, left-1);
+  reserved.add(k);
+  renderSchedule(); renderBoard();
+  toast("SPOT SECURED", PROGRAMS[pid].name+" · "+LABEL_OF_DAY[day]+" "+t+" with "+PROGRAMS[pid].coach+". Arrive 10 min early.");
+}
+$("#schedBody").addEventListener("click", e=>{
+  const b = e.target.closest(".reserve[data-i]");
+  if(!b || b.classList.contains("done") || b.disabled) return;
+  reserveClass(+b.dataset.day, +b.dataset.i);
+});
+$("#dayTabs").addEventListener("click", e=>{
+  const b = e.target.closest(".day-tab"); if(!b) return;
+  activeDay = +b.dataset.day;
+  $$(".day-tab").forEach(t=>t.classList.toggle("active", +t.dataset.day===activeDay));
+  renderSchedule();
+});
+$("#filterChips").addEventListener("click", e=>{
+  const c = e.target.closest(".f-chip"); if(!c) return;
+  activeFilter = c.dataset.cat;
+  $$(".f-chip").forEach(x=>x.classList.toggle("active", x===c));
+  renderSchedule();
+});
+
+/* ---------- LIVE BOARD + COUNTDOWN ---------- */
+function boardClasses(){
+  const now = new Date(); const nowM = now.getHours()*60 + now.getMinutes();
+  let day = TODAY, pool = WEEK[TODAY].filter(c=> minsOf(c[0]) > nowM);
+  if(pool.length < 3){ day = (TODAY+1)%7; pool = pool.concat(WEEK[day].filter(c=> pool.length<3)); }
+  return pool.slice(0,3).map(c=>({day,t:c[0],pid:c[1],meta:PROGRAMS[c[1]]}));
+}
+function renderBoard(){
+  const list = boardClasses();
+  $("#boardDate").textContent = new Date().toLocaleDateString("en-US",{weekday:"short",month:"short",day:"numeric"}).toUpperCase();
+  $("#boardList").innerHTML = list.length ? list.map(x=>{
+    const idx = WEEK[x.day].findIndex(c=>c[0]===x.t && c[1]===x.pid);
+    const left = remaining(x.day, idx);
+    const isRes = reserved.has(keyOf(x.day,x.t,x.pid));
+    const btn = isRes ? '<button class="reserve-mini done">BOOKED ✓</button>'
+      : left===0 ? '<button class="reserve-mini full" disabled>FULL</button>'
+      : '<button class="reserve-mini" data-day="'+x.day+'" data-i="'+idx+'">RESERVE</button>';
+    return '<li><span class="t">'+x.t+'</span><span class="n">'+x.meta.name+'<em>'+x.meta.coach+' · '+x.meta.room+'</em></span>'+btn+'</li>';
+  }).join("") : '<li><span class="t">—</span><span class="n">Today is done.<em>Tomorrow\'s board drops at midnight.</em></span><span></span></li>';
+}
+$("#boardList").addEventListener("click", e=>{
+  const b = e.target.closest(".reserve-mini[data-i]");
+  if(!b || b.disabled || b.classList.contains("done")) return;
+  reserveClass(+b.dataset.day, +b.dataset.i);
+});
+let targetDate = null, targetName = "";
+function pickTarget(){
+  const list = boardClasses();
+  if(!list.length){ targetDate = null; return; }
+  const x = list[0];
+  const base = new Date(); if(x.day !== TODAY) base.setDate(base.getDate()+1);
+  const [h,m] = x.t.split(":").map(Number);
+  base.setHours(h,m,0,0);
+  targetDate = base; targetName = x.meta.name;
+  $("#nextClassName").textContent = x.meta.name;
+  $("#nextClassMeta").textContent = (x.day!==TODAY?"TOMORROW · ":"") + x.t + " · " + x.meta.coach.toUpperCase();
+}
+setInterval(()=>{
+  if(!targetDate || targetDate - Date.now() <= 0){ pickTarget(); }
+  if(!targetDate){ $("#countdown").textContent = "SEE BOARD"; return; }
+  const d = Math.max(0, targetDate - Date.now());
+  const h = Math.floor(d/3600000), m = Math.floor(d%3600000/60000), s = Math.floor(d%60000/1000);
+  $("#countdown").textContent = pad(h)+":"+pad(m)+":"+pad(s);
+},1000);
+pickTarget();
+
+/* ---------- TRIAL FORM CLASS SELECT ---------- */
+(function fillClasses(){
+  const sel = $("#fClass");
+  let html = '<option value="">— choose a session —</option>';
+  DAY_IDX.forEach((g,i)=>{
+    WEEK[g].forEach(c=>{
+      html += '<option value="'+LABEL_OF_DAY[g]+' '+c[0]+' · '+PROGRAMS[c[1]].name+'">'+LABEL_OF_DAY[g]+' '+c[0]+' — '+PROGRAMS[c[1]].name+'</option>';
+    });
+  });
+  sel.innerHTML = html;
+})();
+
+/* ---------- SCRAMBLE ---------- */
+function scramble(el, speed){
+  if(REDUCED) return;
+  const CH = "ABCDEFGHIJKLMNOPQRSTUVWXYZ#/%&▮";
+  const final = el.dataset.text || el.textContent;
+  let frame = 0;
+  const total = final.length * 3 + 14;
+  (function tick(){
+    frame++;
+    const shown = Math.floor((frame/total)*final.length);
+    let out = "";
+    for(let i=0;i<final.length;i++){
+      out += i < shown ? final[i] : (final[i]===" " ? " " : CH[Math.floor(Math.random()*CH.length)]);
+    }
+    el.textContent = out;
+    if(shown < final.length) requestAnimationFrame(tick); else el.textContent = final;
+  })();
+}
+setTimeout(()=> scramble($("#heroKicker"),1), 300);
+setTimeout(()=> scramble($("#scrambleLine"),1), 1400);
+
+/* ---------- REVEAL + COUNTERS ---------- */
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if(!en.isIntersecting) return;
+    en.target.classList.add("inview");
+    if(en.target.classList.contains("stat")) runCounter(en.target.querySelector(".num"));
+    io.unobserve(en.target);
+  });
+},{threshold:.18});
+$$(".reveal, .hero-copy, .stat").forEach(el=> io.observe(el));
+
+function runCounter(el){
+  if(el.dataset.done) return; el.dataset.done = 1;
+  const end = +el.dataset.count, suf = el.dataset.suffix || "";
+  if(REDUCED){ el.textContent = end.toLocaleString()+suf; return; }
+  const t0 = performance.now(), dur = 1400;
+  (function step(t){
+    const p = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-p,3);
+    el.textContent = Math.round(end*e).toLocaleString()+suf;
+    if(p<1) requestAnimationFrame(step);
+  })(t0);
+}
+
+/* ---------- PRICING TOGGLE ---------- */
+const billSwitch = $("#billSwitch");
+let annual = false;
+billSwitch.addEventListener("click", ()=>{
+  annual = !annual;
+  billSwitch.classList.toggle("on", annual);
+  billSwitch.setAttribute("aria-checked", annual);
+  $("#lblMonthly").style.color = annual ? "var(--dim)" : "var(--bone)";
+  $("#lblAnnual").style.color = annual ? "var(--bone)" : "var(--dim)";
+  $$(".price").forEach(p=>{
+    p.classList.remove("flip"); void p.offsetWidth; p.classList.add("flip");
+    setTimeout(()=>{ p.textContent = "€" + (annual ? p.dataset.a : p.dataset.m); }, REDUCED ? 0 : 140);
+  });
+  toast(annual ? "ANNUAL SELECTED" : "MONTHLY SELECTED", annual ? "Two months on us. Commitment pays." : "Flexible it is — upgrade anytime.");
+});
+
+/* ---------- FAQ ---------- */
+$$(".faq-q").forEach(q=> q.addEventListener("click", ()=>{
+  const item = q.parentElement;
+  const wasOpen = item.classList.contains("open");
+  $$(".faq-item").forEach(i=>i.classList.remove("open"));
+  if(!wasOpen) item.classList.add("open");
+}));
+
+/* ---------- QUOTES ---------- */
+const QUOTES = [
+  {t:"I came for the deadlifts. I stayed because at 6 a.m. nobody here lets you coast — the coaches remember your numbers better than you do.",w:"Priya N.",s:"MEMBER SINCE 2022",st:"PB · 150 KG DEADLIFT",img:"member1"},
+  {t:"The programming is ruthless and smart. Sixteen weeks later the scale is down 14 kilos and my knees finally stopped filing complaints.",w:"Marcus T.",s:"ALL IN SINCE 2024",st:"−14 KG · 16 WEEKS",img:"member2"},
+  {t:"I finished my first half marathon at 47. The Engine Room coaches built me for it from zero — intervals, pacing, the lot. I cried at the finish. Twice.",w:"Elena R.",s:"MEMBER SINCE 2023",st:"FIRST RACE AT 47",img:"member3"}
+];
+let qi = 0, qTimer = null;
+function showQuote(i, animate){
+  qi = (i+QUOTES.length)%QUOTES.length;
+  const q = QUOTES[qi];
+  const txt = $("#quoteText"), meta = $("#quoteMeta");
+  const apply = ()=>{
+    txt.textContent = q.t; $("#quoteWho").textContent = q.w; $("#quoteSince").textContent = q.s;
+    $("#quoteStat").textContent = q.st; $("#quoteImg").src = "https://picsum.photos/seed/"+q.img+"/200/200";
+    txt.style.opacity = 1; txt.style.transform = "none"; meta.style.opacity = 1;
+  };
+  if(animate && !REDUCED){
+    txt.style.opacity = 0; txt.style.transform = "translateY(16px)"; meta.style.opacity = 0;
+    setTimeout(apply, 380);
+  } else apply();
+  const bar = $("#qBar");
+  bar.style.transition = "none"; bar.style.width = "0%";
+  void bar.offsetWidth;
+  bar.style.transition = "width 6.5s linear"; bar.style.width = "100%";
+}
+function startQ(){ clearInterval(qTimer); qTimer = setInterval(()=>showQuote(qi+1,true), 6500); }
+$("#qNext").addEventListener("click", ()=>{ showQuote(qi+1,true); startQ(); });
+$("#qPrev").addEventListener("click", ()=>{ showQuote(qi-1,true); startQ(); });
+$("#quoteBox").addEventListener("mouseenter", ()=> clearInterval(qTimer));
+$("#quoteBox").addEventListener("mouseleave", startQ);
+showQuote(0,false); startQ();
+
+/* ---------- COACH RAIL ---------- */
+const rail = $("#coachRail");
+$("#railNext").addEventListener("click", ()=> rail.scrollBy({left:320,behavior:REDUCED?"auto":"smooth"}));
+$("#railPrev").addEventListener("click", ()=> rail.scrollBy({left:-320,behavior:REDUCED?"auto":"smooth"}));
+
+/* ---------- FORM ---------- */
+$("#trialForm").addEventListener("submit", e=>{
+  e.preventDefault();
+  let ok = true;
+  const name = $("#fName"), email = $("#fEmail"), cls = $("#fClass");
+  $("#rowName").classList.toggle("err", !(name.value.trim().length>1));
+  $("#rowEmail").classList.toggle("err", !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()));
+  $("#rowClass").classList.toggle("err", !cls.value);
+  ok = name.value.trim().length>1 && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim()) && cls.value;
+  if(!ok){ toast("HOLD UP","A couple of fields need your attention before we book you in."); return; }
+  const code = "IW-" + Math.random().toString(36).slice(2,6).toUpperCase();
+  $("#passCode").textContent = code;
+  $("#passName").textContent = name.value.trim();
+  $("#passClass").textContent = cls.value;
+  $("#trialForm").style.display = "none";
+  $("#successCard").classList.add("show");
+  toast("WELCOME TO THE FOUNDRY", "Your pass "+code+" is also on its way to "+email.value.trim()+".");
+});
+$("#againBtn").addEventListener("click", ()=>{
+  $("#successCard").classList.remove("show");
+  $("#trialForm").reset(); $("#trialForm").style.display = "";
+});
+$("#calBtn").addEventListener("click", ()=> toast("CALENDAR","Invite sent to your inbox — check for the .ics file."));
+
+/* ---------- NEWSLETTER ---------- */
+$("#newsBtn").addEventListener("click", ()=>{
+  const v = $("#newsEmail").value.trim();
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)){ toast("CHECK THAT EMAIL","Doesn't look right. One more try."); return; }
+  $("#newsEmail").value = "";
+  toast("YOU'RE ON THE LIST","First dispatch lands Friday. Bring coffee.");
+});
+
+/* ---------- NAV / SCROLL / MENU ---------- */
+const header = $("#siteHeader"), prog = $("#progress");
+window.addEventListener("scroll", ()=>{
+  header.classList.toggle("scrolled", window.scrollY > 10);
+  const h = document.documentElement;
+  prog.style.width = (h.scrollTop / (h.scrollHeight - h.clientHeight) * 100) + "%";
+},{passive:true});
+
+const burger = $("#burger");
+burger.addEventListener("click", ()=>{
+  const open = document.body.classList.toggle("menu-open");
+  burger.setAttribute("aria-expanded", open);
+  document.body.style.overflow = open ? "hidden" : "";
+});
+$$("#mobileMenu a").forEach(a=> a.addEventListener("click", ()=>{
+  document.body.classList.remove("menu-open"); document.body.style.overflow = "";
+  burger.setAttribute("aria-expanded","false");
+}));
+
+/* ---------- MAGNETIC BUTTONS ---------- */
+if(!REDUCED && window.matchMedia("(pointer:fine)").matches){
+  $$(".magnetic").forEach(el=>{
+    el.addEventListener("mousemove", e=>{
+      const r = el.getBoundingClientRect();
+      const x = (e.clientX - r.left - r.width/2)/r.width, y = (e.clientY - r.top - r.height/2)/r.height;
+      el.style.transform = "translate("+(x*8)+"px,"+(y*6)+"px)";
+    });
+    el.addEventListener("mouseleave", ()=> el.style.transform = "");
+  });
+}
+
+/* ---------- INIT ---------- */
+renderTabs(); renderSchedule(); renderBoard();
+})();
+</script>
+</body>
+  </html>
