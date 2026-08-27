@@ -1,0 +1,96 @@
+name: Build optimized gym imagery
+
+on:
+  push:
+    branches: [replace-generic-gym-images]
+
+permissions:
+  contents: write
+
+jobs:
+  assets:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create lightweight themed SVG imagery and wire it into the page
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p assets/gym
+          cat > assets/gym/hero.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#17171a"/><stop offset="1" stop-color="#0b0b0c"/></linearGradient></defs><rect width="1200" height="800" fill="url(#g)"/><g fill="none" stroke="#d7ff3e" stroke-width="3" opacity=".72"><path d="M80 650h1040M140 650V180h220v470M420 650V260h250v390M720 650V120h320v530"/><path d="M180 210h720M180 310h720M180 410h720"/></g><g fill="#edeae2" opacity=".16"><circle cx="860" cy="270" r="130"/><circle cx="1040" cy="500" r="170"/></g><text x="80" y="100" fill="#d7ff3e" font-family="monospace" font-size="28" letter-spacing="8">IRONWORKS / FOUNDRY</text></svg>
+          SVG
+          cat > assets/gym/strength.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720"><rect width="900" height="720" fill="#131315"/><g fill="none" stroke="#edeae2" stroke-width="16"><path d="M120 570h660M250 570V220M650 570V220M180 220h540"/><path d="M210 220v-70M690 220v-70"/></g><g fill="#d7ff3e"><rect x="125" y="170" width="70" height="150"/><rect x="705" y="170" width="70" height="150"/><circle cx="450" cy="330" r="72"/></g><path d="M450 400v120M350 470h200" stroke="#ff4d2e" stroke-width="18"/><text x="55" y="665" fill="#8b8b90" font-family="monospace" font-size="22">01 / THE FORGE</text></svg>
+          SVG
+          cat > assets/gym/engine.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720"><rect width="900" height="720" fill="#edeae2"/><g fill="none" stroke="#0b0b0c" stroke-width="18"><path d="M90 560h720M150 180h600M150 180v380M750 180v380"/><path d="M220 560V300h130v260M420 560V240h130v320M620 560V330h100v230"/></g><g fill="#d7ff3e"><circle cx="285" cy="250" r="55"/><circle cx="485" cy="190" r="55"/><circle cx="670" cy="280" r="55"/></g><text x="55" y="665" fill="#55534c" font-family="monospace" font-size="22">02 / ENGINE ROOM</text></svg>
+          SVG
+          cat > assets/gym/mobility.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720"><rect width="900" height="720" fill="#17171a"/><g fill="none" stroke="#d7ff3e" stroke-width="14"><circle cx="450" cy="300" r="120"/><path d="M300 500c100-100 200-100 300 0M450 180v240M330 300h240"/></g><g stroke="#edeae2" stroke-width="5" opacity=".35"><path d="M80 580h740M150 120h600"/></g><text x="55" y="665" fill="#8b8b90" font-family="monospace" font-size="22">03 / RECOVERY</text></svg>
+          SVG
+          cat > assets/gym/combat.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720"><rect width="900" height="720" fill="#d7ff3e"/><path d="M170 560h560M230 560V190h440v370" fill="none" stroke="#0b0b0c" stroke-width="18"/><g fill="#ff4d2e"><circle cx="330" cy="310" r="82"/><circle cx="570" cy="310" r="82"/></g><g fill="#0b0b0c"><path d="M290 420h90l55 95h-190zM520 420h90l45 95h-190z"/></g><text x="55" y="665" fill="#0b0b0c" font-family="monospace" font-size="22">04 / THE PIT</text></svg>
+          SVG
+          cat > assets/gym/hyrox.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 720"><rect width="900" height="720" fill="#131315"/><g fill="none" stroke="#edeae2" stroke-width="10"><path d="M90 120h720M90 220h720M90 320h720M90 420h720M90 520h720"/><path d="M160 80v480M360 80v480M560 80v480M760 80v480"/></g><path d="M110 520h680" stroke="#d7ff3e" stroke-width="36"/><path d="M180 520l90-180 90 180 90-180 90 180 90-180 90 180" fill="none" stroke="#ff4d2e" stroke-width="20"/><text x="55" y="665" fill="#8b8b90" font-family="monospace" font-size="22">05 / THE TRACK</text></svg>
+          SVG
+          cat > assets/gym/floor.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 460"><rect width="640" height="460" fill="#0b0b0c"/><g fill="none" stroke="#edeae2" stroke-width="9"><path d="M70 380h500M110 100h420M110 100v280M530 100v280"/><path d="M180 380V170h80v210M320 380V140h80v240M460 380V200h60v180"/></g><rect x="70" y="70" width="150" height="14" fill="#d7ff3e"/><text x="70" y="430" fill="#d7ff3e" font-family="monospace" font-size="18">THE FLOOR / BUILT TO WORK</text></svg>
+          SVG
+          cat > assets/gym/coach.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 680"><rect width="520" height="680" fill="#17171a"/><circle cx="260" cy="205" r="105" fill="#d7ff3e"/><path d="M95 620c10-160 90-230 165-230s155 70 165 230" fill="#edeae2"/><path d="M145 190c30-120 205-135 240 0-70-35-155-40-240 0z" fill="#0b0b0c"/><rect x="215" y="320" width="90" height="18" fill="#ff4d2e"/><text x="45" y="650" fill="#8b8b90" font-family="monospace" font-size="18">COACH / IRONWORKS</text></svg>
+          SVG
+          cat > assets/gym/member.svg <<'SVG'
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><rect width="200" height="200" rx="100" fill="#131315"/><circle cx="100" cy="72" r="38" fill="#d7ff3e"/><path d="M42 180c8-62 35-84 58-84s50 22 58 84" fill="#edeae2"/></svg>
+          SVG
+
+          python - <<'PY'
+          from pathlib import Path
+          p=Path('index.html')
+          s=p.read_text()
+          reps={
+            'https://picsum.photos/seed/gym1/1600/1000':'assets/gym/hero.svg',
+            'https://picsum.photos/seed/gym2/900/720':'assets/gym/strength.svg',
+            'https://picsum.photos/seed/gym3/900/720':'assets/gym/engine.svg',
+            'https://picsum.photos/seed/gym4/900/720':'assets/gym/mobility.svg',
+            'https://picsum.photos/seed/gym5/900/720':'assets/gym/combat.svg',
+            'https://picsum.photos/seed/gym6/900/720':'assets/gym/hyrox.svg',
+            'https://picsum.photos/seed/gym7/640/460':'assets/gym/floor.svg',
+            'https://picsum.photos/seed/gym8/640/460':'assets/gym/floor.svg',
+            'https://picsum.photos/seed/gym9/640/460':'assets/gym/combat.svg',
+            'https://picsum.photos/seed/gym10/640/460':'assets/gym/mobility.svg',
+            'https://picsum.photos/seed/gym11/640/460':'assets/gym/strength.svg',
+            'https://picsum.photos/seed/gym12/640/460':'assets/gym/hyrox.svg',
+            'https://picsum.photos/seed/person1/520/680':'assets/gym/coach.svg',
+            'https://picsum.photos/seed/person2/520/680':'assets/gym/coach.svg',
+            'https://picsum.photos/seed/person3/520/680':'assets/gym/coach.svg',
+            'https://picsum.photos/seed/person4/520/680':'assets/gym/coach.svg',
+            'https://picsum.photos/seed/person5/520/680':'assets/gym/coach.svg',
+            'https://picsum.photos/seed/person6/520/680':'assets/gym/coach.svg',
+            'https://picsum.photos/seed/member1/200/200':'assets/gym/member.svg',
+            'https://picsum.photos/seed/member2/200/200':'assets/gym/member.svg',
+            'https://picsum.photos/seed/member3/200/200':'assets/gym/member.svg',
+          }
+          for a,b in reps.items(): s=s.replace(a,b)
+          # Keep the hero fast, defer everything below the fold, and provide intrinsic dimensions.
+          s=s.replace('<img src="assets/gym/hero.svg" alt="Gym interior">','<img src="assets/gym/hero.svg" alt="Ironworks training floor" width="1200" height="800" fetchpriority="high" decoding="async">')
+          s=s.replace('<img src="assets/gym/strength.svg" alt="Strength training">','<img src="assets/gym/strength.svg" alt="Strength training" width="900" height="720" loading="lazy" decoding="async">')
+          s=s.replace('<img src="assets/gym/engine.svg" alt="HIIT workout">','<img src="assets/gym/engine.svg" alt="Engine room HIIT workout" width="900" height="720" loading="lazy" decoding="async">')
+          s=s.replace('<img src="assets/gym/mobility.svg" alt="Mobility training">','<img src="assets/gym/mobility.svg" alt="Mobility training" width="900" height="720" loading="lazy" decoding="async">')
+          s=s.replace('<img src="assets/gym/combat.svg" alt="Combat training">','<img src="assets/gym/combat.svg" alt="Combat conditioning" width="900" height="720" loading="lazy" decoding="async">')
+          s=s.replace('<img src="assets/gym/hyrox.svg" alt="HYROX training">','<img src="assets/gym/hyrox.svg" alt="HYROX race training" width="900" height="720" loading="lazy" decoding="async">')
+          # Add dimensions/loading to remaining local imagery without touching CSS.
+          import re
+          s=re.sub(r'<img src="assets/gym/(floor|combat|mobility|strength|hyrox)\.svg" alt="([^"]+)" loading="lazy">', r'<img src="assets/gym/\1.svg" alt="\2" width="640" height="460" loading="lazy" decoding="async">', s)
+          s=re.sub(r'<img src="assets/gym/coach\.svg" alt="([^"]+)" loading="lazy">', r'<img src="assets/gym/coach.svg" alt="\1" width="520" height="680" loading="lazy" decoding="async">', s)
+          s=re.sub(r'<img id="quoteImg" src="assets/gym/member\.svg" alt="([^"]+)">', r'<img id="quoteImg" src="assets/gym/member.svg" alt="\1" width="200" height="200" decoding="async">', s)
+          s=s.replace('"https://picsum.photos/seed/"+q.img+"/200/200"','"assets/gym/member.svg"')
+          p.write_text(s)
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add index.html assets/gym
+          git diff --cached --quiet || git commit -m "feat: replace generic gym imagery with optimized themed assets"
+          git push
