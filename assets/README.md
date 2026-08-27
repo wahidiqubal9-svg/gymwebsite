@@ -1,0 +1,1 @@
+Image assets for the Ironworks site. Generated replacements should be stored here in optimized WebP/AVIF variants and referenced locally from index.html.
